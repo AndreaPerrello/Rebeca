@@ -1,0 +1,72 @@
+- name: LightsOn
+  description: Lights on when someone enters the 3rd room, or its 6pm and someone enters the 2nd room
+  condition:
+    $or:
+      - device:
+          type: people_counter
+          id: 3
+          $properties:
+            count:
+              - '>': 0
+      - $and:
+        - utc:
+            $properties:
+              hours:
+                - '>=': 18
+              minutes:
+                - '>=': 0
+        - device:
+            type: people_counter
+            id: 2
+            $properties:
+              count:
+                - '>': 0
+  action:
+    $class: single
+    $category: service
+    $data:
+      service_name: turn_on
+      target_ids:
+        - 3
+        - 4
+
+- name: AggregationLightsOn
+  description: Lights on when the sum of two counter values is greater than 0
+  condition:
+    $aggregation:
+      $function: sum
+      $entities:
+        - device:
+            type: people_counter
+            id: 2
+        - device:
+            type: people_counter
+            id: 5
+      $property:
+        count:
+          - '>=': 2
+  action:
+    $class: single
+    $category: service
+    $data:
+      service_name: turn_on
+      target_ids:
+        - 7
+
+- name: AnyLightOn
+  description: Lights of the room on when someone enters
+  condition:
+    $and:
+      - $any->device||counter1:
+          type: people_counter
+          $properties:
+            count:
+              - '>': 0
+  action:
+    $class: single
+    $category: service
+    $data:
+      service_name: turn_on
+      target_ids:
+        - $counter1.id
+        - 9
