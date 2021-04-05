@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     import yaml
     # Add rules from yaml config file
-    with open("rules.yml") as f:
+    with open("config/rules.yml") as f:
         rules = yaml.safe_load(f.read())
     for rule in rules:
         rule_engine.add_rule(rule)
