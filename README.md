@@ -5,14 +5,22 @@
 
 This is a wrapper for an *Entity-ECA* (or *EECA*) *Rule-based Knowledge Engine*, derived from the *EXPERTA* implementation of *CLIPS*.
 
-Allows to instruct a knowledge engine to fire conditional actions based on events related to given entities, which triggers user-defined rules. An EECA is an entity-based ECA (Event-Condition-Action system), which treats any event as an Entity-state. Entities preserve their identity inside the engine over time, only allowing modifications of its state.
+Allows to instruct a knowledge engine to fire conditional actions based on events related to given entities, which triggers user-defined rules. An EECA is an entity-based ECA (Event-Condition-Action system), which treats any event as an Entity-state; in other words, any event is associated to an entity, which preserve its identity inside the engine over time, only allowing modifications of its internal state. This means that rules are related to the state of given entities, and parsed from a human-friendly configuration with a structured syntax and schema. Rules can be added and removed both before the start of the engine and after, at run-time.
 
-Rules are related to the state of given entities, and are parsed from a human-friendly JSON payload with a structured schema. Rules can be added and removed both before the start of the engine and after, at run-time.
+Entity events (or Entity-state updates) can be triggered anytime after the first start of the Rule engine. Each event is logically related to its Entity (e.g.: a device with an id, the UTC time, ecc.), which is identified by a set of *key-attributes*. Entity classes can be defined at run time or at startup, in order to define its key attributes. Doing so, triggering an event is equal to update the non-key attributes of an entity. Each entity has a class name, which is the one used in the rule definition.
 
-Entity events (or Entity-state updates) can be triggered anytime after the first start of the Rule engine. Each event is logically related to its Entity (e.g.: a device with an id, the UTC time, ecc.), which is identified by a set of key-attributes. The Entity class has to be overridden in order to define what are the key attribute names of the customized Entity. Triggering an events is equal to trigger an instance of the Event class with a set of attributes. Each Entity is related to a type name, which is the one used in the rule definition. The mapping between an Entity class and the related type name must be registered by adding it in the class-level dictionary named "type_entities" or using the shortcut method "register_entity(type_name, entity_class)". Any non-registered type will be ignored in expected behavior of the rule engine.
+The Rebeca class can be used as-is or overridden in order to manipulate the behavior of entire engine programmatically. One or multiple actions are triggered when a new entity-state update meets the conditions defined by each rule which matches the entity. Actions are defined during at rule definition, in the payload of the rule itself, and must be related to a custom callback function.
 
-The RuleEngine class must be overridden in order to define the behavior of the fired actions. Actions are triggered when a new Entity-state update meets the conditions defined by their rule. Action are defined during at rule definition in the JSON payload and must contain an action category. For any supported category of action, this overridden class must define the related handler method, decorated with @Action, in order to define how to handle the execution of the given category of action.
+#### Features
 
+- Eventi legati alle proprietà di classi di entità
+- Condizioni su confronti algebrici di una o più proprietà delle entità
+- Condizioni parametriche
+- Congiunzione annidate di AND e OR di condizioni
+- Classi di azioni personalizzate e parametriche
+- Azioni parametriche con riferimenti alle entità della condizione
+- Classi di entità definibili a run-time
+- Condizioni su aggregazioni di proprietà tra entità con classi omogenee
 
 #### Usage
 
