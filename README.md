@@ -5,7 +5,7 @@
 
 This is a wrapper for an *Entity-ECA* (or *EECA*) *Rule-based Knowledge Engine*, derived from the *EXPERTA* implementation of *CLIPS*.
 
-Allows to instruct a knowledge engine to fire conditional actions based on events related to given entities, which triggers user-defined rules. An EECA is an entity-based ECA (Event-Condition-Action system), which treats any event as an Entity-state; in other words, any event is associated to an entity, which preserve its identity inside the engine over time, only allowing modifications of its internal state. This means that rules are related to the state of given entities, and parsed from a human-friendly configuration with a structured syntax and schema. Rules can be added and removed both before the start of the engine and after, at run-time.
+Allows to instruct a knowledge engine to fire conditional actions based on events related to given entities (which are basically *digital-twins*) and triggers user-defined rules. An EECA is an entity-based ECA (Event-Condition-Action system), which treats any event as an Entity-state; in other words, any event is associated to an entity, which preserve its identity inside the engine over time, only allowing modifications of its internal state. This means that rules are related to the state of given entities, and parsed from a human-friendly configuration with a structured syntax and schema. Rules can be added and removed both before the start of the engine and after, at run-time.
 
 Entity events (or Entity-state updates) can be triggered anytime after the first start of the Rule engine. Each event is logically related to its Entity (e.g.: a device with an id, the UTC time, ecc.), which is identified by a set of *key-attributes*. Entity classes can be defined at run time or at startup, in order to define its key attributes. Doing so, triggering an event is equal to update the non-key attributes of an entity. Each entity has a class name, which is the one used in the rule definition.
 
@@ -13,14 +13,13 @@ The Rebeca class can be used as-is or overridden in order to manipulate the beha
 
 #### Features
 
-- Eventi legati alle proprietà di classi di entità
-- Condizioni su confronti algebrici di una o più proprietà delle entità
-- Condizioni parametriche
-- Congiunzione annidate di AND e OR di condizioni
-- Classi di azioni personalizzate e parametriche
-- Azioni parametriche con riferimenti alle entità della condizione
-- Classi di entità definibili a run-time
-- Condizioni su aggregazioni di proprietà tra entità con classi omogenee
+- Events related to entity (digital-twins);
+- Conditions based on algebric matches over the properties of multiple entities;
+- Parametric conditions (for rule generalization) and nested conjunctions of AND-OR conditions;
+- Parametric actions, with reference to the triggers;
+- Customizable action classes;
+- Entity classes and rules definition at run-time.
+- Conditions on aggregations of properties beteween entities with similar classes.
 
 #### Usage
 
