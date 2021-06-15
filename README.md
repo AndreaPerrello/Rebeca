@@ -99,14 +99,41 @@ The following is an example of simple rule with a custom algebric and boolean co
 
 The rule has a *name* and a *description* field, and requires two other fields to define its *condition* to be met and the *action* to perform at rule execution.
 
-**Condition**: The condition is a nested-field of keywords representing boolean conjunctions (*and*/*or*). Each unique keyword of the rule-engine starts with a "$" symbol. Each *boolean keyword* contains a list of 1+ *entities* fields (like the *device* and *utc* fields in the example) and one or more *boolean keywords* to build up a complex algebric condition.
+**Condition**: The condition is a nested-field of keywords representing boolean conjunctions (*and*/*or*). Each unique keyword of the rule-engine starts with a "$" symbol.
 
-*Entities* fields represent entities involved in the condition. The key of the field is the class of entity that has to meet some conditions (in the example, a *device* entity). The body of each *entity* field contains key-attributes of the *entity* (*type* and *id*, in the example) and a *properties* keyword, which is a list of non-key attributes of the *entity*. Each property represents a condition of the given entity which must be met in order to fire the rule. In the example, a *people counter device* with an *id equal to 3* must have its *count* property to be *greater than 0* in order to verify the sub-condition in the *or* conjunction.
+    $or:
+      - ...
+      - $and:
+        - ...
+        - ...
 
-In the example, the rule is composed by two nested conjunctions. Deeper levels of the condition tree has the priority over the parents. In the example, will be interpreted as the following boolean expression:
+Each *boolean keyword* contains a list of 1+ *entities* fields (like the *device* and *utc* fields in the example) and one or more *boolean keywords* to build up a complex algebric condition.
+
+    $or:                # Boolean keyword
+      - device: ...     # Entity field
+      - $and:           # Boolean keyword
+        - utc: ...      # Entity field
+        - device: ...   # Entity field
+
+*Entity fields* represent entities involved in the condition. The key of the this kind of fields is the class of entity that needs to meet a sub-condition (e.g. a *device* or *utc* entity). The body of each *entity* field contains:
+ 
+- the key-attributes of the *entity* (e.g. the *device* entity class has *type* and *id* as key-attributes), in order to identify the specific instance of the entity class;
+- a *$properties* keyword, which is a list of non-key attributes of the *entity* with one or more algebric conditions (equalities, disequalities, and so on). 
+                  - 
+As an example, the following portion of the rule definition
+
+    - device:
+          type: people_counter
+          id: 3
+          $properties:
+            count:
+              - '>': 0
+
+Means that *the people counter device with ID=3* must have its *count to be greater than 0* in order to verify the sub-condition in the conjunction.
+In the example, the rule is composed by two nested conjunctions for three sub-conditions. Deeper levels of the condition tree has the priority over the parents, respecting the order of operations in boolean algebra. The whole example rule will be interpreted as the following object-like expression:
 
     device(type=people_counter, id=3).count > 0 OR {[utc.hours >= 18 AND utc.minutes >= 0] AND device(type=people_counter, id=2).count > 0}
     
-This means that the rule action will be fired only if *the people counter device with ID=3 is counting at least one person* or if *its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*.
+Which, in a human-readable definition, means that the rule action will be fired only if *the people counter device with ID=3 is counting at least one person* or if *its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*.
 
 **Action**: Coming soon...
