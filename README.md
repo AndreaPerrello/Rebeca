@@ -59,4 +59,54 @@ The identity of an entity is based on its class and its key attributes. Other pa
 
 #### Rules
 
-Coming soon..
+Rules can be written with a simple syntax in a YAML or JSON format. They can have different level of complexity, as described in the example categories below:
+
+##### Simple algebric-boolean rules
+
+The following is an example of simple rule with a custom algebric and boolean condition.
+
+    - name: LightsOn
+      description: Lights on when someone enters the 3rd room, or its 6pm and someone enters the 2nd room
+      condition:
+        $or:
+          - device:
+              type: people_counter
+              id: 3
+              $properties:
+                count:
+                  - '>': 0
+          - $and:
+            - utc:
+                $properties:
+                  hours:
+                    - '>=': 18
+                  minutes:
+                    - '>=': 0
+            - device:
+                type: people_counter
+                id: 2
+                $properties:
+                  count:
+                    - '>': 0
+      action:
+        $class: single
+        $category: service
+        $data:
+          service_name: turn_on
+          target_ids:
+            - 3
+            - 4
+
+The rule has a *name* and a *description* field, and requires two other fields to define its *condition* to be met and the *action* to perform at rule execution.
+
+**Condition**: The condition is a nested-field of keywords representing boolean conjunctions (*and*/*or*). Each unique keyword of the rule-engine starts with a "$" symbol. Each *boolean keyword* contains a list of 1+ *entities* fields (like the *device* and *utc* fields in the example) and one or more *boolean keywords* to build up a complex algebric condition.
+
+*Entities* fields represent entities involved in the condition. The key of the field is the class of entity that has to meet some conditions (in the example, a *device* entity). The body of each *entity* field contains key-attributes of the *entity* (*type* and *id*, in the example) and a *properties* keyword, which is a list of non-key attributes of the *entity*. Each property represents a condition of the given entity which must be met in order to fire the rule. In the example, a *people counter device* with an *id equal to 3* must have its *count* property to be *greater than 0* in order to verify the sub-condition in the *or* conjunction.
+
+In the example, the rule is composed by two nested conjunctions. Deeper levels of the condition tree has the priority over the parents. In the example, will be interpreted as the following boolean expression:
+
+    device(type=people_counter, id=3).count > 0 OR {[utc.hours >= 18 AND utc.minutes >= 0] AND device(type=people_counter, id=2).count > 0}
+    
+This means that the rule action will be fired only if *the people counter device with ID=3 is counting at least one person* or if *its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*.
+
+**Action**: Coming soon...
