@@ -1,7 +1,7 @@
 # R.E.B.E.C.A. Engine
-### Rule-Entity-Based Event-Condition-Action system
+## Rule-Entity-Based Event-Condition-Action system
 
-#### Introduction
+### Introduction
 
 This is a wrapper for an *Entity-ECA* (or *EECA*) *Rule-based Knowledge Engine*, derived from the *EXPERTA* implementation of *CLIPS*.
 
@@ -11,7 +11,7 @@ Entity events (or Entity-state updates) can be triggered anytime after the first
 
 The Rebeca class can be used as-is or overridden in order to manipulate the behavior of entire engine programmatically. One or multiple actions are triggered when a new entity-state update meets the conditions defined by each rule which matches the entity. Actions are defined during at rule definition, in the payload of the rule itself, and must be related to a custom callback function.
 
-#### Features
+### Features
 
 - Events related to entity (digital-twins);
 - Conditions based on algebric matches over the properties of multiple entities;
@@ -21,7 +21,7 @@ The Rebeca class can be used as-is or overridden in order to manipulate the beha
 - Entity classes and rules definition at run-time.
 - Conditions on aggregations of properties beteween entities with similar classes.
 
-#### Usage
+### Usage
 
 Import the core class:
 
@@ -57,13 +57,10 @@ Trigger new events on the system:
 
 The identity of an entity is based on its class and its key attributes. Other parameters, not contained in the key attributes defined for the entity class, will considered as properties of the entity. Both key and non-key attributes are eligible to usage on the definition of rules.
 
-#### Rules
+### Rules
 
-Rules can be written with a simple syntax in a YAML or JSON format. They can have different level of complexity, as described in the example categories below:
-
-##### Simple algebric-boolean rules
-
-The following is an example of simple rule with a custom algebric and boolean condition.
+Rules can be written with a simple syntax in a YAML or JSON format.
+The following is an example of simple rule with a custom algebric and boolean conditions.
 
     - name: LightsOn
       description: Lights on when someone enters the 3rd room, or its 6pm and someone enters the 2nd room
@@ -97,9 +94,13 @@ The following is an example of simple rule with a custom algebric and boolean co
             - 3
             - 4
 
-The rule has a *name* and a *description* field, and requires two other fields to define its *condition* to be met and the *action* to perform at rule execution.
+#### Fields
 
-**Condition**: The condition is a nested-field of keywords representing boolean conjunctions (*and*/*or*). Each unique keyword of the rule-engine starts with a "$" symbol.
+The rule has a *name* and a *description* field, and requires two other fields to define the *condition* to be met and the *action* to perform at rule execution.
+
+##### Condition
+
+The condition is a nested-field of keywords representing boolean conjunctions (*and*/*or*). Each unique keyword of the rule-engine starts with a "$" symbol.
 
     $or:
       - ...
@@ -129,11 +130,13 @@ As an example, the following portion of the rule definition
             count:
               - '>': 0
 
-Means that "*the people counter device with ID=3* must have its *count to be greater than 0*" in order to verify the sub-condition in the conjunction.
+means that "*the people counter device with ID=3* must have its *count to be greater than 0*" in order to verify the sub-condition in the conjunction.
 In the example, the rule is composed by two nested conjunctions for three sub-conditions. Deeper levels of the condition tree has the priority over the parents, respecting the order of operations in boolean algebra. The whole example rule will be interpreted as the following object-like expression:
 
     device(type=people_counter, id=3).count > 0 OR {[utc.hours >= 18 AND utc.minutes >= 0] AND device(type=people_counter, id=2).count > 0}
     
-Which, in a human-readable definition, means that the rule action will be fired only if "*the people counter device with ID=3 is counting at least one person*" **OR** if "*its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*".
+which, in a human-readable definition, means that the rule action will be fired only if "*the people counter device with ID=3 is counting at least one person*" **OR** if "*its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*".
 
-**Action**: Coming soon...
+##### Action
+
+Coming soon...
