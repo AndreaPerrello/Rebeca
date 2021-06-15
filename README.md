@@ -163,4 +163,13 @@ Aggregation entities are considered as normal entities in terms of nestability i
 
 ##### Action
 
-Coming soon...
+...
+
+      action:
+        $class: single
+        $category: service
+        $data:
+          service_name: turn_on
+          target_ids:
+            - 3
+            - 4
