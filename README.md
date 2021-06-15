@@ -137,6 +137,30 @@ In the example, the rule is composed by two nested conjunctions for three sub-co
     
 which, in a human-readable definition, means that the rule action will be fired only if "*the people counter device with ID=3 is counting at least one person*" **OR** if "*its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*".
 
+##### Aggregation conditions
+
+Conditions can be also defined on aggregations of values of different *homogenous entities*. Two or more entities are homogeneous respect to an aggregation if the aggregation property exists for each considered entity.
+
+In the example below, we want the sum of the *count* property of two entity of class *device* to be at least 2:
+
+    condition:
+        $aggregation:
+          $function: sum
+          $entities:
+            - device:
+                type: people_counter
+                id: 2
+            - device:
+                type: people_counter
+                id: 5
+          $property:
+            count:
+              - '>=': 2
+
+...
+
+Aggregation entities are considered as normal entities in terms of nestability inside *$or*/*$and* keywords.
+
 ##### Action
 
 Coming soon...
