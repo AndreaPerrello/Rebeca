@@ -129,11 +129,11 @@ As an example, the following portion of the rule definition
             count:
               - '>': 0
 
-Means that *the people counter device with ID=3* must have its *count to be greater than 0* in order to verify the sub-condition in the conjunction.
+Means that "*the people counter device with ID=3* must have its *count to be greater than 0*" in order to verify the sub-condition in the conjunction.
 In the example, the rule is composed by two nested conjunctions for three sub-conditions. Deeper levels of the condition tree has the priority over the parents, respecting the order of operations in boolean algebra. The whole example rule will be interpreted as the following object-like expression:
 
     device(type=people_counter, id=3).count > 0 OR {[utc.hours >= 18 AND utc.minutes >= 0] AND device(type=people_counter, id=2).count > 0}
     
-Which, in a human-readable definition, means that the rule action will be fired only if *the people counter device with ID=3 is counting at least one person* or if *its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*.
+Which, in a human-readable definition, means that the rule action will be fired only if "*the people counter device with ID=3 is counting at least one person*" **OR** if "*its at least 6pm on the UTC and the people counter device with ID=2 is counting at least one person*".
 
 **Action**: Coming soon...
