@@ -119,7 +119,7 @@ Each *boolean keyword* contains a list of 1+ *entities* fields (like the *device
  
 - the key-attributes of the *entity* (e.g. the *device* entity class has *type* and *id* as key-attributes), in order to identify the specific instance of the entity class;
 - a *$properties* keyword, which is a list of non-key attributes of the *entity* with one or more algebric conditions (equalities, disequalities, and so on). 
-                  - 
+
 As an example, the following portion of the rule definition
 
     - device:
