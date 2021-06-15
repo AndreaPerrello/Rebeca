@@ -174,6 +174,6 @@ An action determines what is fired when the rule condition is met:
 
 Each action always contains the following keywords:
 
-- **$class**: The class of action to fire. Currently, only 'single' fire is support by default, but others can be added;
-- **$category**: A string which determines the function to fire to execute the action. Multiple action categories can be defined at runtime;
-- **$data**: The payload of the action's fired function.
+- **$class**: the class of action to fire (currently, only 'single' fire is support by default, but others can be added);
+- **$category**: a string which determines the function to fire to execute the action. Multiple action categories can be defined at runtime;
+- **$data**: the payload of the action's fired function.
