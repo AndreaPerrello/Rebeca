@@ -157,13 +157,11 @@ In the example below, we want the sum of the *count* property of two entity of c
             count:
               - '>=': 2
 
-...
-
-Aggregation entities are considered as normal entities in terms of nestability inside *$or*/*$and* keywords.
+Aggregation entities blocks are considered as entities themselves in terms of nestability inside *$or*/*$and* keywords.
 
 ##### Action
 
-...
+An action determines what is fired when the rule condition is met:
 
       action:
         $class: single
@@ -173,3 +171,9 @@ Aggregation entities are considered as normal entities in terms of nestability i
           target_ids:
             - 3
             - 4
+
+Each action always contains the following keywords:
+
+- **$class**: The class of action to fire. Currently, only 'single' fire is support by default, but others can be added;
+- **$category**: A string which determines the function to fire to execute the action. Multiple action categories can be defined at runtime;
+- **$data**: The payload of the action's fired function.
